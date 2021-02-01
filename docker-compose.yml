@@ -7,12 +7,18 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - "./mysql:/var/lib/mysql"
 
   newznab:
     image: newznab_plus
+    depends_on:
+    - db
     restart: always
     environment:
       TZ: America/New_York
+    volumes:
+      - "./newznab:/var/www/newznab"
     ports:
       - 8088:80
 

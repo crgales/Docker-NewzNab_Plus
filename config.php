@@ -7,7 +7,7 @@ define('DB_TYPE', 'mysql');
 define('DB_HOST', 'db');
 define('DB_PORT', 3306);
 define('DB_USER', 'root');
-define('DB_PASSWORD','xxxxxxx');
+define('DB_PASSWORD','password');
 define('DB_NAME', 'newznab');
 define('DB_INNODB', false);
 define('DB_PCONNECT', true);

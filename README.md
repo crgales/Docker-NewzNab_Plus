@@ -1,56 +1,44 @@
-# Docker NewzNab Plus
-NewzNab plus as Docker -  SQL Runs as seperate container
+# NewzNab Plus - http://www.newznab.com
+NewzNab plus as Docker - Encapsulates both Newznab and MySQL in a Docker compose file
 
-Newznab as a Docker file  (http://www.newznab.com/)
-You will need to modify config.php for your settings (im working on making this persist in docker but the way NN install runs is a little painful)
-You will also need to modify the Dockerfile to include the NewzNab Plus SVN Username and password (Provided when you registered)
+Prerequisites:
+  A system configured for Docker - docker, docker-compose
+  Several system utilities - unzip, subversion
 
-For the first run go to http://yourserver/install   and step through the installer - This forces a Build of the Database in MYSQL and creates a user.
+Step 1:
+  Get the GIT repository:
 
-Save NZBs in /nzb/ you will need to use the -v command to expose this volume to your local host filesystem
+git clone https://github.com/cgales/Docker-NewzNab_Plus.git
 
-Dont forget to go to Site Settings in Newznab and add your Newznab user id or you wont get Regex downloads and releases wont build
+Step 1:
+  Get Newznab plus. You can either use an existing .zip file or clone the SVN repository.
+  Edit the script 'get_newznab.sh' and add the SVN username/password you received. Comment/uncomment the extraction method you want.
+  Run './get_newznab.sh' and a 'newznab' directory will be created.
 
-uses a standard MySQL docker image for database.
+Step 2:
+  Build the docker container:
 
-MySQL
-```
-sudo docker run  -v <LocalConfigDir>:/var/lib/mysql --name mysql -e MYSQL_ROOT_PASSWORD=xxxxx -p 3306:3306 -d mysql:latest
-```
- Newznab
-Build the Docker file: 
-```
-git clone https://github.com/cmeindl/Docker-NewzNab_Plus.git
-cd Docker-NewzNab_Plus
-Sudo docker build -t "newznab" .
-```
-Start the image:
-```
-sudo docker run --restart=always -v <LocalNZBDir>:/nzb -v /etc/localtime:/etc/localtime:ro   -p 80:80 -d   --name="newznab" newznab
-```
-# Home Theatre Setup
-This forms part of a Broader home TV System- The remainder use off the Shelf Docker files from Tim-Haak (https://github.com/timhaak)
+docker build -t newznab_plus .
 
-Plex
-```
-git clone git@github.com:timhaak/docker-plex.git
-cd docker-plex
-docker build -t plex .
-sudo docker run --restart=always -d --net="host" -v <LocalConfigDir>:/config -v <LocalDataDir>:/data  -v /etc/localtime:/etc/localtime:ro -p 32400:32400   --name="plex"  plex
-```
-Sabnzbd
-```
-git clone https://github.com/timhaak/docker-sabnzbd.git
-cd docker-sabnzbd
-docker build -t sabnzbd .
-sudo docker run --restart=always -d -h ubuntu -v <LocalConfigDir>:/config -v <LocalDataDir>/data -v <LocalFileProcessDIr>:/ToProcess -v /etc/localtime:/etc/localtime:ro -p 8080:8080 -p 9090:9090 --name="sabnzbd" sabnzbd 
-```
-SickRage
-```
-git clone  https://github.com/timhaak/docker-sickrage.git
-cd docker-sickrage
-docker build -t sickrage .
-sudo docker run --restart=always -d -h ubuntu -v <LocalConfigDir>:/config -v <LocalDataDir>:/data   -v <LocalFileProcessDIr>:/ToProcess  -v /etc/localtime:/etc/localtime:ro -p 8081:8081 --name="sickrage" sickrage
-```
-The /ToProcess file is where Sickrage processes files from and Sabnzbd Saves donloaded files too, Note I have mounted this externally, you could use Dockers internal concept of Volumes from but sometimes you need to look at the processing directory and fix or delete files so I have it on an accesible file system for ease
+  This will download/build the Docker container on your system. The container will be named "newznab_plus"
+
+Step 3:
+  Run the docker container:
+
+docker-compose up -d
+
+  This will download the MySQL docker container (standard) and run both docker containers
+
+Step 4:
+
+For the first run go to http://yourserver/install and step through the installer - This forces a Build of the Database in MYSQL and creates a user.
+The default database type/host/port/user/password should work as is.
+
+Notes:
+
+Don't forget to go to Site Settings in Newznab and add your Newznab user id or you wont get Regex downloads and releases wont build
+
+All NZBs will be available in the newznab/nzbfiles directory. You will typically access them through the site, but this is an alternative method.
+
+You can add any site customization per the Newznab docs in the newznab directory.
 

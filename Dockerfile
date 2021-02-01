@@ -5,27 +5,11 @@ MAINTAINER Chuck Gales <cgales@gmail.com> - Branched from Cameron Meindl <cmeind
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -yq install php php-dev php-pear php-gd php-mysql php-curl \
     mysql-client libmysqlclient-dev apache2 subversion unrar-free lame software-properties-common mediainfo supervisor
 
-# need to add your Newznab plus SVN Password and user here http://newznab4win.blogspot.com.au/2013/01/installing-newznab.html
-
-ENV nn_user <svnuser>
-ENV nn_pass <svnpassword>
 ENV php_timezone America/New_York
 ENV path /:/var/www/html/www/
 
 # add the Config to Apache
 ADD ./newznab.conf /etc/apache2/sites-available/newznab.conf
-RUN mkdir /var/www/newznab/
-
-# pull NNab plus from SVN - Note you need the username and password for SVN above
-RUN svn co --username $nn_user --password $nn_pass svn://svn.newznab.com/nn/branches/nnplus /var/www/newznab/
-RUN chmod 777 /var/www/newznab/www/lib/smarty/templates_c && \
-chmod 777 /var/www/newznab/www/covers/movies && \
-chmod 777 /var/www/newznab/www/covers/anime  && \
-chmod 777 /var/www/newznab/www/covers/music  && \
-chmod 777 /var/www/newznab/www/covers/tv     && \
-chmod 777 /var/www/newznab/www  && \
-chmod 777 /var/www/newznab/www/install  && \
-chmod 777 /var/www/newznab/nzbfiles
 
 #fix the config files for PHP
 RUN sed -i "s/max_execution_time = 30/max_execution_time = 120/" /etc/php/7.4/cli/php.ini  && \
@@ -44,22 +28,18 @@ RUN a2ensite newznab
 RUN a2enmod rewrite
 RUN service apache2 restart
 
-# add newznab config file - This needs to be edited
-ADD ./config.php /var/www/newznab/www/config.php
-RUN chmod 777 /var/www/newznab/www/config.php
-
 #add newznab processing script
 ADD ./newznab.sh /newznab.sh
 RUN chmod 755 /*.sh
 
 #Setup supervisor to start Apache and the Newznab scripts to load headers and build releases
-
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Setup NZB volume this will need to be mapped locally using -v command so that it can persist.
+# Setup Newznab volume this will need to be mapped locally using -v command so that it can persist.
 EXPOSE 80
-VOLUME /nzb
-WORKDIR /var/www/html/www/
+VOLUME /var/www/newznab
+WORKDIR /var/www/newznab
+
 #kickoff Supervisor to start the functions
 CMD ["/usr/bin/supervisord"]
