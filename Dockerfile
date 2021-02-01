@@ -28,10 +28,6 @@ RUN a2ensite newznab
 RUN a2enmod rewrite
 RUN service apache2 restart
 
-#add newznab processing script
-ADD ./newznab.sh /newznab.sh
-RUN chmod 755 /*.sh
-
 #Setup supervisor to start Apache and the Newznab scripts to load headers and build releases
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

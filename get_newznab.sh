@@ -32,3 +32,7 @@ chmod 777 ./newznab/nzbfiles
 cp ./config.php ./newznab/www/config.php
 chmod 777 ./newznab/www/config.php
 
+# Fix the background script (If SVN is fixed, this could be removed)
+dos2unix newznab/misc/update_scripts/nix_scripts/newznab.sh
+sed -i "s/htdocs\///" newznab/misc/update_scripts/nix_scripts/newznab.sh
+chmod +x newznab/misc/update_scripts/nix_scripts/newznab.sh

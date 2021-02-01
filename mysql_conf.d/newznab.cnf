@@ -1,0 +1,7 @@
+[mysqld]
+max_allowed_packet=12582912
+group_concat_max_len=8192
+skip-host-cache
+skip-name-resolve
+
+

@@ -3,12 +3,13 @@ version: "3.1"
 services:
 
   db:
-    image: mysql
+    image: mysql/mysql-server
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
     volumes:
       - "./mysql:/var/lib/mysql"
+      - "./mysql_conf.d:/etc/mysql/conf.d"
 
   newznab:
     image: newznab_plus
