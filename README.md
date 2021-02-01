@@ -23,6 +23,7 @@ docker build -t newznab_plus .
   This will download/build the Docker container on your system. The container will be named "newznab_plus"
 
 Step 3:
+  Edit docker-compose.yml to change the default HTTP port (if desired).
   Run the docker container:
 
 docker-compose up -d
@@ -31,8 +32,10 @@ docker-compose up -d
 
 Step 4:
 
-For the first run go to http://yourserver/install and step through the installer - This forces a Build of the Database in MYSQL and creates a user.
+For the first run go to http://yourserver:8088/install and step through the installer - This forces a Build of the Database in MYSQL and creates a user.
 The default database type/host/port/user/password should work as is.
+
+The port number defaults to 8088. You can change it in the docker-compose.yml file if desired.
 
 Notes:
 
@@ -41,4 +44,6 @@ Don't forget to go to Site Settings in Newznab and add your Newznab user id or y
 All NZBs will be available in the newznab/nzbfiles directory. You will typically access them through the site, but this is an alternative method.
 
 You can add any site customization per the Newznab docs in the newznab directory.
+
+The MySQL database is in the mysql/ directory. Do with it what you wish.
 

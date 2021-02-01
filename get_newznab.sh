@@ -11,13 +11,13 @@
 #
 
 # SVN
-#nn_user=<nn_user>
-#nn_pass=<nn_pass>
+nn_user=<nn_user>
+nn_pass=<nn_pass>
 
-#svn co --username $nn_user --password $nn_pass svn://svn.newznab.com/nn/branches/nnplus newznab
+svn co --username $nn_user --password $nn_pass svn://svn.newznab.com/nn/branches/nnplus newznab
 
 # From zip file
-unzip newznab-023_4146.zip -d newznab
+#unzip newznab-023_4146.zip -d newznab
 
 chmod 777 ./newznab/www/lib/smarty/templates_c
 chmod 777 ./newznab/www/covers/movies
@@ -28,6 +28,7 @@ chmod 777 ./newznab/www
 chmod 777 ./newznab/www/install
 chmod 777 ./newznab/nzbfiles
 
-# add newznab config file - This needs to be edited
+# add predefined configuration file
 cp ./config.php ./newznab/www/config.php
 chmod 777 ./newznab/www/config.php
+
