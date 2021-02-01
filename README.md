@@ -8,7 +8,7 @@ Prerequisites:
 Step 1:
   Get the GIT repository:
 
-git clone https://github.com/cgales/Docker-NewzNab_Plus.git
+git clone https://github.com/crgales/Docker-NewzNab_Plus.git
 
 Step 2:
   Get Newznab plus. You can either use an existing .zip file or clone the SVN repository.
